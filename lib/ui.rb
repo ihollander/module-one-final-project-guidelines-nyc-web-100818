@@ -19,36 +19,30 @@ class UI
   end
 
   def display_game_over
-    if self.game.won?
-      puts "You won!"
-    else
-      puts "You lost :("
+    clear_screen
+      if self.game.won?
+        display_delimiter_magenta("^","")
+        tty_font_print_end_page("Congratulation! You Won!")
+      else
+        display_delimiter_magenta("^","")
+        tty_font_print_end_page("You  are  neither")
+        tty_font_print_end_page("popular  nor  powerful")
+      end
     end
-  end
 
   def run
-
     clear_screen # call from display_methods
-
     UI.display_logo
-
     disolve_screen(SCREEN_SIZE[1],0.01) # call from display_methods
-
-    self.game = Game.new # start a new game
-
     display_welcome # display welcome message
     name_input = ask("Enter your name: ") # prompt for player to enter name
     player = Player.new(name_input) # create new player instance
     player.display_intro # display welcome message with player details
-
     player.house.display_info # display house info
-
     display_delimiter_magenta("^","Press [ENTER] to continue")
     gets # wait for enter
-
     self.game = Game.new(player)
     self.game.play
-
     display_game_over
   end
 
@@ -61,6 +55,12 @@ class UI
     end
   end
 
+  def tty_font_print_end_page(text)
+    #TODO center text
+    font = TTY::Font.new(:standard)
+    puts PASTEL.yellow(font.write(text))
+  end
+
 # def house_color(player)
 #   house_color = player.house.color
 #   binding.pry
@@ -71,7 +71,7 @@ class UI
 # end
 
   def self.display_logo
-    if self.get_win_width >= 76
+    if SCREEN_SIZE[1] >= 76
       logo_ascii = [
   '.      .           /\      .:  *       .       .                 .',
   '            *    .    .      .     .     *   .        #            .',

@@ -10,7 +10,7 @@ class Player < Character
     self.charm_points = 10
     self.name = name
     self.house_id = House.all.sample.id
-    self.wand = Character.all.sample.wand
+    self.wand = Character.all.select{|c| !c.wand.start_with?(" ") }.sample.wand
     self.pet = ["cat", "owl", "toad", "rat"].sample
     self.patronus = MY_ANIMAL_FAKER.sample
     @spells = Spell.all.sample(4)

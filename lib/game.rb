@@ -64,15 +64,17 @@ class Game
       when "L"
         disolve_screen(15,0.02)
         self.lboard.display_all
+        display_delimiter_magenta("^","Press [ENTER] to continue")
+        gets
       when "W"
         disolve_screen(15,0.02)
         classmate = self.get_classmate_encounter # get classmate for this round
         classmate.display_intro # show the classmate info
         encounter_character(classmate) # enter combat mode (taunt/compliment)
         simulate_ai_combat # after player combat, simulate AI combat
+        display_delimiter_magenta("^","Press [ENTER] to continue")
+        gets
     end
-    display_delimiter_magenta("^","Press [ENTER] to continue")
-    gets
   end
 
   def prompt_turn_input
