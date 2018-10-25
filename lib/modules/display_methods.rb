@@ -1,5 +1,9 @@
 module DisplayMethods
 
+  def ask(prompt, valid_inputs)
+    
+  end
+
   def get_center_coordinates(offset_x=0, offset_y=0)
     center_y = (SCREEN_SIZE[0]/2) - offset_y
     center_x = (SCREEN_SIZE[1]/2) - offset_x

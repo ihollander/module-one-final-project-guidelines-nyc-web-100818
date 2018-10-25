@@ -9,14 +9,14 @@ class UI
     tty_font_print("Welcome to Hogwarts!")
     sleep(2)
 
-    delimiter_magenta("^")
+    UI.delimiter_magenta("^")
     puts "\n In Howgarts you can choose to become the most powerful student or the most popular student."
     sleep(2)
     puts "\n You need to defeat or charm 3 of your fellow students or professor to win."
     sleep(2)
     puts "\n Make your choices wisely."
     sleep(2)
-    continue_prompt_magenta
+    UI.continue_prompt_magenta
   end
 
   def prompt_for_player_name
@@ -38,6 +38,7 @@ class UI
     puts "\n Your Head of House is #{player.house.head_of_house}."
     puts "\n Your House ghost is #{player.house.house_ghost} "
     house_color(player)
+    UI.continue_prompt_magenta
   end
 
   def house_color(player)
@@ -132,7 +133,7 @@ class UI
   def sortinghat_prompt_magenta
     continue = "(Sorting Hat working its magic)"
 
-    w = get_win_width
+    w = UI.get_win_width
 
     ((w / 2) - (continue.length / 2) - 1).times { print Pastel.new.magenta("^") }
 
