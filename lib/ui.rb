@@ -41,7 +41,7 @@ class UI
 
   def run
 
-    UI.clear_screen
+    disolve_screen(SCREEN_SIZE[1],0.02) # call from display_methods
 
     self.game = Game.new # start a new game
 
@@ -62,10 +62,6 @@ class UI
 
     display_game_over
 
-  end
-
-  def self.clear_screen
-    IO.popen("clear", "w")
   end
 
   def tty_font_print(text)
@@ -103,9 +99,9 @@ class UI
   def UI.delimiter_magenta(character)
     puts " "
     w = UI.get_win_width
-    w.times { print Pastel.new.magenta(character) }
+    w.times { print PASTEL.magenta(character) }
     (w/2).times { print " " }
-    puts Pastel.new.yellow("⚡")
+    puts PASTEL.yellow("⚡")
   end
 
 end

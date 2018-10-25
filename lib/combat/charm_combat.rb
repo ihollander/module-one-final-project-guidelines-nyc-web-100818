@@ -86,11 +86,11 @@ class CharmCombat
   def start_ai_round
     until over?
       if self.whose_turn == self.player.name
-        charm = self.player.charms.sample
+        charm = self.player_charm_options.sample
         self.classmate_damage += charm.points
         self.whose_turn = self.classmate.name
       else
-        charm = self.classmate.charms.sample
+        charm = self.classmate_charm_options.sample
         self.player_damage += charm.points
         self.whose_turn = self.player.name
       end

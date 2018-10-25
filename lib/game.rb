@@ -1,5 +1,7 @@
 # main game class
 class Game
+  include DisplayMethods
+
   attr_accessor :lboard, :player, :classmates, :already_played
 
   def initialize
@@ -47,7 +49,7 @@ class Game
   end
 
   def turn_prompt
-    UI.clear_screen
+    disolve_screen(SCREEN_SIZE[1],0.02) # from display_methods
     UI.delimiter_magenta("^")
     puts "Options"
     puts "Check leaderboard(l) | Wander the hallways (w) | Quit (q)"
@@ -59,27 +61,20 @@ class Game
     puts "What will you do?"
     print "⚡: "
     input = gets.chomp
-    if input.class == String
-      if input.downcase == "q"
-        #TODO remove this and add exit game method
-      elsif input.downcase == "l"
-        IO.popen("clear", "w")
-        sleep(0.1)
-        self.lboard.display_all
-        UI.continue_prompt_magenta
-        self.turn_prompt
-      elsif input.downcase == "w"
-        IO.popen("clear","w")
-        sleep(0.2)
-      else
-        puts "Invalid input\n \n"
-        self.turn_prompt_input
-      end
-    else puts "Invalid input \n \n"
+    if input.downcase == "q"
+      #TODO remove this and add exit game method
+    elsif input.downcase == "l"
+      disolve_screen(15,0.02)
+      self.lboard.display_all
+      UI.continue_prompt_magenta
+      self.turn_prompt
+    elsif input.downcase == "w"
+      disolve_screen(15,0.02)
+    else
+      puts "Invalid input\n \n"
       self.turn_prompt_input
     end
   end
-
 
   def turn
     self.turn_prompt
@@ -87,6 +82,7 @@ class Game
     classmate.display_intro # show the classmate info
     encounter_character(current_classmate)
     simulate_ai_combat
+    UI.continue_prompt_magenta
   end
 
   def encounter_character(classmate)
