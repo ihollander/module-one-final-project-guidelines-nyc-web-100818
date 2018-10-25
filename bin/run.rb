@@ -3,10 +3,6 @@ require_relative '../config/environment'
 ui = UI.new
 ui.run
 
-game.display_leaderboard(lboard)
-
-binding.pry
-
 # # 1. welcome user
 # puts "Welcome to Hogwarts!"
 # # 2. explain the game

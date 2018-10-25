@@ -1,79 +1,119 @@
 class CharmCombat
-  attr_accessor :player, :classmate, :player_cp, :classmate_cp
+  include DisplayMethods
+
+  attr_accessor :player, :player_damage, :player_charm_options, :classmate, :classmate_damage, :classmate_charm_options, :whose_turn
 
   def initialize(player, classmate)
     @player = player
     @classmate = classmate
-    @player_cp = 0
-    @classmate_cp = 0
+    @player_damage = 0
+    @classmate_damage = 0
+    @whose_turn = [@player.name, @classmate.name].sample
+    @player_charm_options = @player.charms
+    @classmate_charm_options = @classmate.charms
+  end
+
+  def display_combat_screen(last_action)
+    clear_screen
+    display_stats # stats
+    puts ""
+    puts last_action # Current action
+    puts ""
+    if over?
+      display_results
+    else
+      puts "It's #{self.whose_turn}'s turn..."
+    end
+    puts ""
+    # Prompt box for player actions (spells)
   end
 
   def display_stats
-    puts "Your charm points: #{self.player_cp}. Charm points needed to make you friendly: #{self.player.charm_points}."
-    puts "#{self.classmate.name}'s charm points: #{self.classmate_cp}. Charm points needed to make #{self.classmate.name} friendly: #{self.classmate.charm_points}."
+    player_damage = PASTEL.red("❤︎ " * self.player_damage)
+    classmate_damage = PASTEL.red("❤︎ " * self.classmate_damage)
+    puts "#{self.player.name} charmed: #{player_damage}".ljust(SCREEN_SIZE[0] / 2) + "#{self.classmate.name} charmed: #{classmate_damage}".ljust(SCREEN_SIZE[0] / 2)
   end
 
   def display_results
-    result = @player_cp >= self.player.charm_points ? "#{self.classmate.name} smittened you!" : "You smittened #{self.classmate.name}!"
+    result = self.player_damage >= self.player.charm_points ? "#{self.classmate.name} charmed you!" : "You charmed #{self.classmate.name}!"
     puts result
   end
 
-  def calculate_results
-    @player_cp >= self.player.charm_points ? self.classmate.friends += 1 : self.player.friends += 1
+  def display_charm_effect(charm, caster, target)
+    reaction = ""
+    case charm.points
+      when 1, 2, 3
+        reaction = "#{target.name} smiles."
+      when 4, 5, 6
+        reaction = "#{target.name} blushes!"
+      when 7, 8, 9
+        reaction = "#{target.name} gives #{caster.name} a big ol hug!"
+      when 10
+        reaction = "#{target.name} kisses #{caster.name}! Aww."
+    end
+    result = "#{caster.name} says: #{charm.dialog}\n"
+    result += "#{reaction}\n"
+    result += "#{charm.points} charm added!"
+    result
   end
 
   def start
-    whose_turn = ["player","classmate"].sample # random player starts
+    last_action = "You're having a nice conversation with #{self.classmate.name}!"
+    display_combat_screen(last_action)
 
     until over?
-      display_stats # show stats each turn
-      if whose_turn == "player"
-        player_charm = prompt_player_for_charm
-        self.classmate_cp += player_charm.points
-        puts "#{self.classmate.name} blushes. #{player_charm.points} charm points added!"
-        whose_turn = "classmate"
+      display_combat_screen(last_action)
+      if self.whose_turn == self.player.name
+        charm = prompt_player_for_charm
+        self.player_charm_options.delete(charm)
+        self.classmate_damage += charm.points
+        last_action = display_charm_effect(charm, self.player, self.classmate)
+        self.whose_turn = self.classmate.name
       else
-        puts "It's #{self.classmate.name}'s turn...'"
-        sleep(1)
-        classmate_charm = self.classmate.charms.sample
-        @player_cp += classmate_charm.points
-        puts "#{self.classmate.name} said: #{classmate_charm.dialog}"
-        puts "#{classmate_charm.points} added!"
-        whose_turn = "player"
+        sleep(3)
+        charm = self.classmate_charm_options.sample
+        self.classmate_charm_options.delete(charm)
+        self.player_damage += charm.points
+        last_action = display_charm_effect(charm, self.classmate, self.player)
+        self.whose_turn = self.player.name
       end
     end
 
     calculate_results
-    display_results
+    display_combat_screen(last_action)
   end
 
   def start_ai_round
-    whose_turn = ["player","classmate"].sample # random player starts
     until over?
-      if whose_turn == "player"
-        player_charm = self.player.charms.sample
-        self.classmate_cp += player_charm.points
-        whose_turn = "classmate"
+      if self.whose_turn == self.player.name
+        charm = self.player.charms.sample
+        self.classmate_damage += charm.points
+        self.whose_turn = self.classmate.name
       else
-        classmate_charm = self.classmate.charms.sample
-        @player_cp += classmate_charm.points
-        whose_turn = "player"
+        charm = self.classmate.charms.sample
+        self.player_damage += charm.points
+        self.whose_turn = self.player.name
       end
     end
     calculate_results
   end
 
   def over?
-    self.player_cp >= self.player.charm_points || self.classmate_cp >= self.classmate.charm_points
+    self.player_damage >= self.player.charm_points || self.classmate_damage >= self.classmate.charm_points
+  end
+
+  def calculate_results
+    self.player_damage >= self.player.charm_points ? self.classmate.friends += 1 : self.player.friends += 1
   end
 
   def prompt_player_for_charm
     charm = nil
+    available_charms = self.player_charm_options.sample(4)
     until charm
-      puts self.player.display_charm_options
+      puts self.display_charm_options(available_charms)
       charm_input = gets.chomp
-      if valid_charm_input?(charm_input)
-        charm = self.player.charms[charm_input.to_i - 1]
+      if valid_charm_input?(charm_input, available_charms)
+        charm = available_charms[charm_input.to_i - 1]
       else
         puts "Invalid input!"
       end
@@ -81,9 +121,17 @@ class CharmCombat
     charm
   end
 
-  def valid_charm_input?(input_string)
+  def display_charm_options(available_charms)
+    charm_options = []
+    available_charms.each_with_index{|charm, index|
+      charm_options << "[#{index + 1}] #{charm.dialog}"
+    }
+    "Say something nice: \n#{charm_options.join("\n")}"
+  end
+
+  def valid_charm_input?(input_string, available_charms)
     charm_number = input_string.to_i
-    charm_number.to_s == input_string && charm_number.between?(1, self.player.charms.length) # check valid number
+    charm_number.to_s == input_string && charm_number.between?(1, available_charms.length) # check valid number
   end
 
 end

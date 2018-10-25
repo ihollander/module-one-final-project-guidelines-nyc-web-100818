@@ -1,5 +1,7 @@
 # main game class
 class Game
+  include DisplayMethods
+
   attr_accessor :lboard, :player, :classmates
 
   def initialize
@@ -25,7 +27,7 @@ class Game
       }
       classmate = Classmate.new(classmate_hash)
       classmate.spells = character.spells
-      classmate.charms = Charm.all.sample(4)
+      classmate.charms = Charm.all
       @classmates << classmate
     end
   end # get_random_classmates

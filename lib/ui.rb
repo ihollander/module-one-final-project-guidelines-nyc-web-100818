@@ -1,5 +1,7 @@
 # UI - prompts, display messages, etc
 class UI
+  include DisplayMethods
+
   attr_accessor :game
 
   def display_welcome
@@ -69,10 +71,9 @@ class UI
   def tty_font_print(text)
     #TODO center text
     sp_text = text.split(" ")
-    pastel = Pastel.new
     font = TTY::Font.new(:standard)
     sp_text.each do |t|
-      puts pastel.cyan(font.write(t, letter_spacing: 0))
+      puts PASTEL.cyan(font.write(t, letter_spacing: 0))
     end
   end
 
@@ -86,18 +87,18 @@ class UI
 
     w = get_win_width
 
-    ((w / 2) - (continue.length / 2) - 1).times { print Pastel.new.magenta("^") }
+    ((w / 2) - (continue.length / 2) - 1).times { print PASTEL.magenta("^") }
 
-    print Pastel.new.magenta(continue)
+    print PASTEL.magenta(continue)
 
-    ((w / 2) - (continue.length / 2)).times { print Pastel.new.magenta("^") }
+    ((w / 2) - (continue.length / 2)).times { print PASTEL.magenta("^") }
 
     gets.chomp
   end
 
   def delimiter_magenta(character)
     w = get_win_width
-    w.times { print Pastel.new.magenta(character) }
+    w.times { print PASTEL.magenta(character) }
   end
 
 end

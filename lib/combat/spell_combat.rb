@@ -1,91 +1,94 @@
 class SpellCombat
-  attr_accessor :player, :classmate, :player_hp, :classmate_hp
+  include DisplayMethods
+
+  attr_accessor :player, :classmate, :player_damage, :classmate_damage, :whose_turn
 
   def initialize(player, classmate)
     @player = player
     @classmate = classmate
-    @player_hp = player.hit_points
-    @classmate_hp = classmate.hit_points
+    @player_damage = 0
+    @classmate_damage = 0
+    @whose_turn = [@player.name, @classmate.name].sample
+  end
+
+  def display_combat_screen(last_action)
+    clear_screen
+    display_stats # stats
+    puts ""
+    puts last_action # Current action
+    puts ""
+    if over?
+      display_results
+    else
+      puts "It's #{self.whose_turn}'s turn..."
+    end
+    puts ""
+    # Prompt box for player actions (spells)
   end
 
   def display_stats
-    puts "Your hit points: #{self.player_hp}"
-    puts "#{self.classmate.name}'s hit points: #{self.classmate_hp}"
+    player_damage = "⚡" * self.player_damage
+    classmate_damage = "⚡" * self.classmate_damage
+    puts "#{self.player.name} damage taken: #{player_damage}".ljust(SCREEN_SIZE[0] / 2) + "#{self.classmate.name} damage taken: #{classmate_damage}".ljust(SCREEN_SIZE[0] / 2)
   end
 
   def display_results
-    result = @player_hp <= 0 ? "#{self.classmate.name} defeated you!" : "You defeated #{self.classmate.name}!"
+    result = self.player_damage >= self.player.hit_points ? "#{self.classmate.name} defeated you!" : "You defeated #{self.classmate.name}!"
     puts result
   end
 
+  def display_spell_effect(spell, caster, target)
+    result = "#{caster.name} cast #{spell.name}!\n"
+    result += "#{spell.name}: #{spell.description}.\n"
+    result += "#{target.name} takes #{spell.hit_points} damage."
+    result
+  end
+
   def calculate_results
-    @player_hp <= 0 ? self.classmate.victories += 1 : self.player.victories += 1
+    self.player_damage >= self.player.hit_points ? self.classmate.victories += 1 : self.player.victories += 1
   end
 
   def start
-    whose_turn = ["player","classmate"].sample # random player starts
+    last_action = "You have entered a wizard duel with #{self.classmate.name}!"
+    display_combat_screen(last_action)
 
     until over?
-      display_stats # show stats each turn
-      if whose_turn == "player"
-        puts "It's your turn."
-        player_spell = prompt_player_for_spell
-        self.classmate_hp -= player_spell.hit_points
-        puts "You cast #{player_spell.name}!"
-        puts "#{self.classmate.name} takes #{player_spell.hit_points} damage."
-        whose_turn = "classmate"
+      display_combat_screen(last_action)
+      if self.whose_turn == self.player.name
+        spell = self.player.prompt_for_spell
+        self.classmate_damage += spell.hit_points
+        last_action = display_spell_effect(spell, self.player, self.classmate)
+        self.whose_turn = self.classmate.name
       else
-        puts "It's #{self.classmate.name}'s turn..."
-        sleep(1) # AI thinking...
-        classmate_spell = self.classmate.spells.sample
-        self.player_hp -= classmate_spell.hit_points
-        puts "#{self.classmate.name} cast #{classmate_spell.name}!"
-        puts "#{classmate_spell.name}: #{classmate_spell.description}."
-        puts "You take #{classmate_spell.hit_points} damage."
-        whose_turn = "player"
+        sleep(3)
+        spell = self.classmate.spells.sample
+        self.player_damage += spell.hit_points
+        last_action = display_spell_effect(spell, self.classmate, self.player)
+        self.whose_turn = self.player.name
       end
     end
 
     calculate_results
-    display_results
+    display_combat_screen(last_action)
   end
 
   def start_ai_round
-    whose_turn = ["player","classmate"].sample # random player starts
     until over?
-      if whose_turn == "player"
+      if self.whose_turn == self.player.name
         player_spell = self.player.spells.sample
-        self.classmate_hp -= player_spell.hit_points
-        whose_turn = "classmate"
+        self.classmate_damage += player_spell.hit_points
+        self.whose_turn = self.classmate.name
       else
         classmate_spell = self.classmate.spells.sample
-        self.player_hp -= classmate_spell.hit_points
-        whose_turn = "player"
+        self.player_damage += classmate_spell.hit_points
+        self.whose_turn = self.player.name
       end
     end
     calculate_results
   end
 
   def over?
-    self.player_hp <= 0 || self.classmate_hp <= 0
+    self.player_damage >= self.player.hit_points || self.classmate_damage >= self.classmate.hit_points
   end
 
-  def prompt_player_for_spell
-    spell = nil
-    until spell
-      puts self.player.display_spell_options
-      spell_input = gets.chomp
-      if valid_spell_input?(spell_input)
-        spell = self.player.spells[spell_input.to_i - 1]
-      else
-        puts "Invalid input!"
-      end
-    end
-    spell
-  end
-
-  def valid_spell_input?(input_string)
-    spell_number = input_string.to_i
-    spell_number.to_s == input_string && spell_number.between?(1, self.player.spells.length) # check valid number
-  end
 end

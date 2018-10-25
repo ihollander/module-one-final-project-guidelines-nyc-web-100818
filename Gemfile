@@ -8,6 +8,8 @@ gem "require_all"
 gem "rest-client"
 gem "faker"
 gem "json"
+gem 'tty-cursor'
+gem 'tty-screen'
 gem "tty-font"
 gem "pastel"
 # gem "colorize"
