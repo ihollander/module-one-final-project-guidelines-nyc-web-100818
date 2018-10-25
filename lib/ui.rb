@@ -67,11 +67,12 @@ class UI
   end
 
   def tty_font_print(text)
+    #TODO center text
     sp_text = text.split(" ")
     pastel = Pastel.new
     font = TTY::Font.new(:standard)
     sp_text.each do |t|
-      puts pastel.cyan(font.write(t, letter_spacing: 1))
+      puts pastel.cyan(font.write(t, letter_spacing: 0))
     end
   end
 
