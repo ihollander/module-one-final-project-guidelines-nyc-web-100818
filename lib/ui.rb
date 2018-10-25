@@ -3,16 +3,14 @@ class UI
   attr_accessor :game
 
   def display_welcome
-    w = get_win_width
 
     tty_font_print("Welcome to Hogwarts!")
 
-    w.times { print "^" }
-
     sleep(1)
+    delimiter_magenta("^")
     puts "\n This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
 
-    continue_prompt
+    continue_prompt_magenta
   end
 
   def prompt_for_player_name
@@ -95,27 +93,8 @@ class UI
 
   end
 
-  def continue_prompt
-    continue = "(enter to continue)"
-
-    w = get_win_width
-
-    ((w / 2) - (continue.length / 2) - 1).times { print "^" }
-
-    print continue
-
-    ((w / 2) - (continue.length / 2)).times { print "^" }
-
-    gets.chomp
-  end
-
   def clear_screen
     IO.popen("clear", "w")
-  end
-
-  def get_win_width
-    row, column = $stdin.winsize
-    column
   end
 
   def tty_font_print(text)
@@ -125,6 +104,30 @@ class UI
     sp_text.each do |t|
       puts pastel.cyan(font.write(t, letter_spacing: 1))
     end
+  end
+
+  def get_win_width
+    row, column = $stdin.winsize
+    column
+  end
+
+  def continue_prompt_magenta
+    continue = "(enter to continue)"
+
+    w = get_win_width
+
+    ((w / 2) - (continue.length / 2) - 1).times { print Pastel.new.magenta("^") }
+
+    print Pastel.new.magenta(continue)
+
+    ((w / 2) - (continue.length / 2)).times { print Pastel.new.magenta("^") }
+
+    gets.chomp
+  end
+
+  def delimiter_magenta(character)
+    w = get_win_width
+    w.times { print Pastel.new.magenta(character) }
   end
 
 end
