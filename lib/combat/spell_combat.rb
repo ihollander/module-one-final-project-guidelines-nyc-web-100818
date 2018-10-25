@@ -51,7 +51,7 @@ class SpellCombat
   def start
     last_action = "You have entered a wizard duel with #{self.classmate.name}!"
     display_combat_screen(last_action)
-
+    
     until over?
       display_combat_screen(last_action)
       if self.whose_turn == self.player.name

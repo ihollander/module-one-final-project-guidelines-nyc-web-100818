@@ -1,13 +1,24 @@
 module DisplayMethods
 
-  def ask(prompt, valid_inputs)
-    
-  end
-
-  def get_center_coordinates(offset_x=0, offset_y=0)
-    center_y = (SCREEN_SIZE[0]/2) - offset_y
-    center_x = (SCREEN_SIZE[1]/2) - offset_x
-    [center_x, center_y]
+  def ask(prompt, valid_inputs=[])
+    upcased_inputs = valid_inputs.map{|input| input.upcase}
+    valid = false
+    print CURSOR.save
+    until valid
+      print CURSOR.restore
+      puts prompt
+      print "⚡: "
+      input = gets.chomp
+      if valid_inputs.length == 0 && input.length > 0
+        valid = true
+      elsif upcased_inputs.include?(input.upcase)
+        valid = true
+      else
+        puts "Invalid input!"
+      end
+    end
+    puts "" # clear the next line...
+    input
   end
 
   def clear_screen
@@ -23,6 +34,15 @@ module DisplayMethods
       sleep(sleep_time)
     end
     print CURSOR.move_to(0, y_offset)
+  end
+
+  def display_delimiter_magenta(delimiter, text="")
+    colored_delimiter = PASTEL.magenta(delimiter)
+    text_offset = (SCREEN_SIZE[1] - text.length) / 2
+    lightning_offset = (SCREEN_SIZE[1] - "⚡".length) / 2
+    puts " "
+    puts "#{colored_delimiter * text_offset}#{text}#{colored_delimiter * text_offset}"
+    puts "#{" " * lightning_offset}" + PASTEL.yellow("⚡")
   end
 
 end

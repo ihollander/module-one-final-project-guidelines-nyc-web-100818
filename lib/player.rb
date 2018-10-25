@@ -1,4 +1,5 @@
 class Player < Character
+  include DisplayMethods
 
   attr_accessor :charms, :spells, :friends, :victories, :classmates_faced
 
@@ -19,31 +20,38 @@ class Player < Character
     self.victories = 0
   end
 
-  def display_spell_options
+  def prompt_for_spell
     spell_options = []
+    input_options = []
     self.spells.each_with_index{|spell, index|
+      input_options << "#{index + 1}"
       spell_options << "[#{index + 1}] #{spell.name} - #{spell.description}"
     }
-    "Pick a spell: \n#{spell_options.join("\n")}"
+    prompt = "Pick a spell: \n#{spell_options.join("\n")}"
+    input = ask(prompt, input_options)
+    self.spells[input.to_i - 1]
   end
 
-  def prompt_for_spell
-    spell = nil
-    until spell
-      puts self.display_spell_options
-      spell_input = gets.chomp
-      if valid_spell_input?(spell_input)
-        spell = self.spells[spell_input.to_i - 1]
-      else
-        puts "Invalid input!"
-      end
+  def display_intro
+    intro_array = []
+    intro_array << "\n#{self.name}, Olivanders has customized a wand for you! It's made of #{self.wand}."
+    intro_array << "\nYour pet: #{self.pet}! Your patronus: #{self.patronus}!"
+    intro_array.each do |line|
+      puts line
+      sleep(2)
     end
-    spell
-  end
 
-  def valid_spell_input?(input_string)
-    spell_number = input_string.to_i
-    spell_number.to_s == input_string && spell_number.between?(1, self.spells.length) # check valid number
+    display_delimiter_magenta("^","(Sorting Hat working its magic... Press [ENTER] to continue)")
+    gets
+
+    intro_array = []
+    intro_array << "\nCongratulations! You have been sorted into #{self.house.name} House!"
+    intro_array << "\n#{self.house.founder} founded the House hoping to find young wizards that have #{self.house.values}."
+    intro_array << "\nYour Head of House is #{self.house.head_of_house}.\nYour House ghost is #{self.house.house_ghost}."
+    intro_array.each do |line|
+      puts line
+      sleep(2)
+    end
   end
 
 end

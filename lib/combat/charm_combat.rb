@@ -61,6 +61,7 @@ class CharmCombat
     last_action = "You're having a nice conversation with #{self.classmate.name}!"
     display_combat_screen(last_action)
 
+    binding.pry
     until over?
       display_combat_screen(last_action)
       if self.whose_turn == self.player.name
