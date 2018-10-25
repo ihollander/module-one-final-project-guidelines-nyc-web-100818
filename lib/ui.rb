@@ -3,13 +3,11 @@ class UI
   attr_accessor :game
 
   def display_welcome
-
     tty_font_print("Welcome to Hogwarts!")
-
     sleep(1)
+
     delimiter_magenta("^")
     puts "\n This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
-
     continue_prompt_magenta
   end
 
@@ -20,7 +18,7 @@ class UI
 
   def display_player_info(player)
     puts "#{player.name} is in house #{player.house.name}"
-    puts "Your wand: #{player.wand}! Your pet: #{player.pet}! Your patronus: #{player.patronus}!"
+    puts "Your wand: #{player.wand}! \n Your pet: #{player.pet}! \n Your patronus: #{player.patronus}! \n"
   end
 
   # a. if taunt is picked, go to combat screen (8)
