@@ -3,8 +3,16 @@ class UI
   attr_accessor :game
 
   def display_welcome
-    puts "Welcome to Hogwarts!"
-    puts "This is a game where you befriend or defeat your fellow Hogwarts classmates."
+    w = get_win_width
+
+    tty_font_print("Welcome to Hogwarts!")
+
+    w.times { print "^" }
+
+    sleep(1)
+    puts "\n This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
+
+    continue_prompt
   end
 
   def prompt_for_player_name
@@ -63,6 +71,9 @@ class UI
   end
 
   def run
+
+    clear_screen
+
     self.game = Game.new # start a new game
 
     display_welcome # call welcome method
@@ -82,6 +93,38 @@ class UI
 
     puts "You won! You're the most popular kid in school."
 
+  end
+
+  def continue_prompt
+    continue = "(enter to continue)"
+
+    w = get_win_width
+
+    ((w / 2) - (continue.length / 2) - 1).times { print "^" }
+
+    print continue
+
+    ((w / 2) - (continue.length / 2)).times { print "^" }
+
+    gets.chomp
+  end
+
+  def clear_screen
+    IO.popen("clear", "w")
+  end
+
+  def get_win_width
+    row, column = $stdin.winsize
+    column
+  end
+
+  def tty_font_print(text)
+    sp_text = text.split(" ")
+    pastel = Pastel.new
+    font = TTY::Font.new(:standard)
+    sp_text.each do |t|
+      puts pastel.cyan(font.write(t, letter_spacing: 1))
+    end
   end
 
 end

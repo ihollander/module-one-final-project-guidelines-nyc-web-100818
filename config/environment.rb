@@ -2,6 +2,9 @@ require 'bundler'
 require 'rest-client'
 require 'json'
 require 'faker'
+require 'io/console'
+require 'tty-font'
+require 'pastel'
 
 Bundler.require
 
