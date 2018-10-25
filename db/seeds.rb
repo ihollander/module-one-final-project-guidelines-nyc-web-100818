@@ -6,7 +6,41 @@ class SeedRunner
 
     # seed houses manually...
     puts "Seeding houses..."
-    house_hashes = [{name: "Gryffindor",color: "Scarlet & Gold"},{name: "Slytherin",color: "Green & Silver"},{name: "Ravenclaw",color: "Blue & Bronze"},{name: "Hufflepuff",color: "Yellow & Black"}]
+    house_hashes = [{name: "Gryffindor",
+     color: "Scarlet & Gold",
+     mascout: "Lion",
+     head_of_house: "Minerva McGonagall",
+     house_ghost: "Nearly Headless Nick",
+     founder: "Goderic Gryffindor",
+     values: "Courage, Bravery, Nerve and Chivalry"
+     },
+
+    {name: "Slytherin",
+     color: "Green & Silver",
+     mascout: "Serpent",
+     head_of_house: "Severus Snape",
+     house_ghost: "The Bloody Baron",
+     founder: "Salazar Slytherin",
+     values: "Ambition, Cunning, Leadership and Resourcefulness"
+    },
+
+    {name: "Ravenclaw",
+     color: "Blue & Bronze",
+     mascout: "Eagle",
+     head_of_house: "Fillius Flitwick",
+     house_ghost: "The Grey Lady",
+     founder: "Rowena Ravenclaw",
+     values: "Intelligence, Creativity, Learning and Wit"
+    },
+
+    {name: "Hufflepuff",
+     color: "Yellow and Black",
+     mascout: "Badger",
+     head_of_house: "Pomona Sprout",
+     house_ghost: "The Fat Friar",
+     founder: "Helga Hufflepuff",
+     values: "Hard work, Patience, Justice and Loyalty"
+    }]
     house_hashes.each do |house_hash|
       House.create(house_hash)
     end

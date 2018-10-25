@@ -3,8 +3,10 @@ class UI
   attr_accessor :game
 
   def display_welcome
+    puts ColorizedString["This is blue"].colorize(:light_blue)
+    # binding.pry
     puts "Welcome to Hogwarts!"
-    puts "This is a game where you befriend or defeat your fellow Hogwarts classmates."
+    puts "In here you can befriend or defeat your fellow Hogwarts classmates."
   end
 
   def prompt_for_player_name
@@ -13,7 +15,14 @@ class UI
   end
 
   def display_player_info(player)
-    puts "#{player.name} is in house #{player.house.name}"
+    puts "Congratulation!You have been sorted into #{player.house.name} House!"
+    gets
+    puts "#{player.house.founder} founded the House hoping to find young wizards that have #{player.house.values}."
+    gets
+    puts "Your Head of House is #{player.house.head_of_house}."
+    puts "Your House ghost is #{player.house.house_ghost} "
+    puts "Your House colors are #{player.house.color}"
+    gets
     puts "Your wand: #{player.wand}! Your pet: #{player.pet}! Your patronus: #{player.patronus}!"
   end
 

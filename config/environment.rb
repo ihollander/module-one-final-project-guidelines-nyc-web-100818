@@ -2,6 +2,8 @@ require 'bundler'
 require 'rest-client'
 require 'json'
 require 'faker'
+require 'colorized_string'
+require 'colorize'
 
 Bundler.require
 

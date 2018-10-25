@@ -14,6 +14,7 @@ GEM
       tzinfo (~> 1.1)
     arel (9.0.0)
     coderay (1.1.2)
+    colorize (0.8.1)
     concurrent-ruby (1.0.5)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
@@ -63,6 +64,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   faker
   json
   pry
@@ -72,4 +74,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.16.4
+   1.16.6
