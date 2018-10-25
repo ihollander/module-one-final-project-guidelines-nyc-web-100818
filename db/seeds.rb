@@ -34,7 +34,7 @@ class SeedRunner
     },
 
     {name: "Hufflepuff",
-     color: "Yellow and Black",
+     color: "Yellow & Black",
      mascout: "Badger",
      head_of_house: "Pomona Sprout",
      house_ghost: "The Fat Friar",
