@@ -19,4 +19,20 @@ class Player < Character
     self.victories = 0
   end
 
+  def display_spell_options
+    spell_options = []
+    self.spells.each_with_index{|spell, index|
+      spell_options << "[#{index + 1}] #{spell.name} - #{spell.description}"
+    }
+    "Pick a spell: \n#{spell_options.join("\n")}"
+  end
+
+  def display_charm_options
+    charm_options = []
+    self.charms.each_with_index{|charm, index|
+      charm_options << "[#{index + 1}] #{charm.dialog}"
+    }
+    "Say something nice: \n#{charm_options.join("\n")}"
+  end
+
 end

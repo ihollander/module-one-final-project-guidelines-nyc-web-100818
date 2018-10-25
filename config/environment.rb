@@ -10,7 +10,7 @@ Bundler.require
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/development.db')
 ActiveRecord::Base.logger = nil
 
-require_all 'lib/modules'
+require_all 'lib/combat'
 require_all 'lib/models'
 require_all 'lib'
 

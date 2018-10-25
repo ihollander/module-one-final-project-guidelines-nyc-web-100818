@@ -4,10 +4,8 @@ class Leaderboard
 
   def initialize(player, classmates)
     @contenders = []
-    @contenders << player
-    classmates.each{|classmate|
-      @contenders << classmate
-    }
+    @contenders += [player]
+    @contenders += classmates
   end
 
   # gets the victories and friends of a character
