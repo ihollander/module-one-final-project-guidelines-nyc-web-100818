@@ -3,7 +3,6 @@ class UI
   attr_accessor :game
 
   def display_welcome
-=======
     # puts ColorizedString["This is blue"].colorize(:light_blue)
     tty_font_print("Welcome to Hogwarts!")
     sleep(1)
@@ -68,11 +67,12 @@ class UI
   end
 
   def tty_font_print(text)
+    #TODO center text
     sp_text = text.split(" ")
     pastel = Pastel.new
     font = TTY::Font.new(:standard)
     sp_text.each do |t|
-      puts pastel.cyan(font.write(t, letter_spacing: 1))
+      puts pastel.cyan(font.write(t, letter_spacing: 0))
     end
   end
 
