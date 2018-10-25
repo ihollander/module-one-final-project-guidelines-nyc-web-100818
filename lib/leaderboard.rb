@@ -1,4 +1,5 @@
 class Leaderboard
+  include DisplayMethods
 
   attr_reader :contenders
 
@@ -12,21 +13,21 @@ class Leaderboard
   def score(contender)
     print "#{contender.name}: "
     sleep(0.1)
-    contender.friends.times {print "#{Pastel.new.red("❤︎")}"}
+    contender.friends.times {print "#{PASTEL.red("❤︎")}"}
     print " | " if contender.friends > 0 && contender.victories > 0
     sleep (0.1)
-    contender.victories.times {print "#{Pastel.new.red("⚡")}"}
+    contender.victories.times {print "#{PASTEL.red("⚡")}"}
     puts " "
     sleep(0.1)
   end
 
   def display_all
-    UI.delimiter_magenta("^")
-    w = UI.get_win_width
+    display_delimiter_magenta("^")
+    w = SCREEN_SIZE[1]
     (w/2 - 7).times {print " "}
     puts "|Leaderboard|\n"
     (w/2 - 21).times {print " "}
-    puts "#{Pastel.new.red("❤︎")} friends on WitchBook || #{Pastel.new.red("⚡")} notches on wand"
+    puts "#{PASTEL.red("❤︎")} friends on WitchBook || #{PASTEL.red("⚡")} notches on wand"
     self.contenders.each { |contender| score(contender)}
   end
 

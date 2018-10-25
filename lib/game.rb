@@ -2,15 +2,18 @@
 class Game
   include DisplayMethods
 
-  attr_accessor :lboard, :player, :classmates, :already_played
+  attr_accessor :lboard, :player, :classmates, :already_played, :player_quit
 
-  def initialize
+  def initialize(player)
+    @player = player
     # create classmates array
     @classmates = []
-    get_random_classmates
+    @player_quit = false
+    init_random_classmates
+    @lboard = Leaderboard.new(self.player, self.classmates)
   end
 
-  def get_random_classmates
+  def init_random_classmates
     characters = Classmate.all.select {|character| character.occupation == "student" || character.occupation == "staff" }.sample(9)
     characters.each do |character|
       classmate_hash = {
@@ -32,8 +35,10 @@ class Game
     end
   end # get_random_classmates
 
-  def initialize_leaderboard
-    @lboard = Leaderboard.new(self.player, self.classmates)
+  def play
+    until self.over?
+      self.turn # take a turn
+    end
   end
 
   def lost?
@@ -45,80 +50,63 @@ class Game
   end
 
   def over?
-     self.won? || self.lost?
-  end
-
-  def turn_prompt
-    disolve_screen(SCREEN_SIZE[1],0.02) # from display_methods
-    UI.delimiter_magenta("^")
-    puts "Options"
-    puts "Check leaderboard(l) | Wander the hallways (w) | Quit (q)"
-    puts" "
-    self.turn_prompt_input
-  end
-
-  def turn_prompt_input
-    puts "What will you do?"
-    print "⚡: "
-    input = gets.chomp
-    if input.downcase == "q"
-      #TODO remove this and add exit game method
-    elsif input.downcase == "l"
-      disolve_screen(15,0.02)
-      self.lboard.display_all
-      UI.continue_prompt_magenta
-      self.turn_prompt
-    elsif input.downcase == "w"
-      disolve_screen(15,0.02)
-    else
-      puts "Invalid input\n \n"
-      self.turn_prompt_input
-    end
+     self.won? || self.lost? || self.player_quit
   end
 
   def turn
-    self.turn_prompt
-    current_classmate = classmate = self.get_classmate_encounter
-    classmate.display_intro # show the classmate info
-    encounter_character(current_classmate)
-    simulate_ai_combat
-    UI.continue_prompt_magenta
+    disolve_screen(30,0.02) # clear the screen at the beginning of each turn (from display_methods)
+    display_delimiter_magenta("^") # show delimiter
+
+    input = self.prompt_turn_input # get player's choice
+    case input.upcase
+      when "Q"
+        self.player_quit = true
+      when "L"
+        disolve_screen(15,0.02)
+        self.lboard.display_all
+      when "W"
+        disolve_screen(15,0.02)
+        classmate = self.get_classmate_encounter # get classmate for this round
+        classmate.display_intro # show the classmate info
+        encounter_character(classmate) # enter combat mode (taunt/compliment)
+        simulate_ai_combat # after player combat, simulate AI combat
+    end
+    display_delimiter_magenta("^","Press [ENTER] to continue")
+    gets
+  end
+
+  def prompt_turn_input
+    prompt = "Options\n"
+    prompt += "Check [L]eaderboard | [W]ander the hallways | [Q]uit\n"
+    prompt += "\n"
+    prompt += "What will you do?"
+    ask(prompt, ["L","W","Q"])
   end
 
   def encounter_character(classmate)
-    valid_input = false
-    until valid_input
-      puts "Taunt or compliment? [T]/[C]"
-      input = gets.chomp
-      if input.upcase == "T"
-        valid_input = true
+    input = ask("[T]aunt or [C]ompliment?", ["T","C"])
+    case input.upcase
+      when "T"
         combat_round = SpellCombat.new(self.player, classmate)
         combat_round.start
-      elsif input.upcase == "C"
-        valid_input = true
+      when "C"
         combat_round = CharmCombat.new(self.player, classmate)
         combat_round.start
-      else
-        puts "Invalid input!"
-      end
     end
   end
 
   def get_classmate_encounter
-    classmate = self.get_random_classmate
-    # get a random classmate
-    self.player.classmates_faced << classmate
-    # keep track of who the student has met
-    @already_played = [player, classmate]
-    # prompts user to see what they want every turn
+    classmate = self.get_random_classmate # get a random classmate
+    self.player.classmates_faced << classmate # keep track of who the student has met
+    self.already_played = [player, classmate] # prompts user to see what they want every turn
     classmate
   end
 
   def simulate_ai_combat
     4.times do
-      classmate_1 = get_available_classmate_for_round
+      classmate_1 = get_ai_classmate
       self.already_played += [classmate_1]
-      classmate_2 = get_available_classmate_for_round
+      classmate_2 = get_ai_classmate
       self.already_played += [classmate_2]
       round = ["T","C"].sample
       if round == "T"
@@ -131,15 +119,12 @@ class Game
     end
   end
 
-  def get_available_classmate_for_round
+  def get_ai_classmate
     self.classmates.select{|classmate| !self.already_played.include?(classmate) }.sample
   end
 
   def get_random_classmate
-    available_classmates = self.classmates.select{|classmate|
-      self.player.classmates_faced.include?(classmate) == false
-    }
-    available_classmates.sample
+    self.classmates.select{|classmate| !self.player.classmates_faced.include?(classmate) }.sample
   end
 
 end
