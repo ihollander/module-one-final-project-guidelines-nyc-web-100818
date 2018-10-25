@@ -46,14 +46,40 @@ class Game
      self.won? || self.lost?
   end
 
+  def turn_prompt
+    UI.clear_screen
+    UI.delimiter_magenta("^")
+    puts "Options"
+    puts "Check leaderboard(l) | Wander the hallways (w) | Quit (q)"
+    puts" "
+    self.turn_prompt_input
+  end
+
+  def turn_prompt_input
+    puts "What will you do?"
+    print "⚡: "
+    input = gets.chomp
+    if input.class == String
+      if input.downcase == "q"
+        #TODO remove this and add exit game method
+      elsif input.downcase == "l"
+        self.lboard.display_all
+        self.turn_prompt
+      elsif input.downcase == "w"
+        IO.popen("clear","w")
+      else
+        puts "Invalid input\n \n"
+        self.turn_prompt_input
+      end
+    else puts "Invalid input \n \n"
+      self.turn_prompt_input
+    end
+  end
+
+
   def turn
-
-    self.lboard.display_all # display the leaderboard on each turn
-
-    classmate = self.get_random_classmate # get a random classmate
-    self.player.classmates_faced << classmate # keep track of who the student has met
-    already_played = [player, classmate] # keeps track of who has faced each other this turn
-
+    self.turn_prompt
+    classmate = self.get_classmate_encounter
     classmate.display_intro # show the classmate info
 
     valid_input = false
@@ -75,6 +101,16 @@ class Game
 
     simulate_ai_combat(already_played)
 
+  end
+
+  def get_classmate_encounter
+    classmate = self.get_random_classmate
+    # get a random classmate
+    self.player.classmates_faced << classmate
+    # keep track of who the student has met
+    already_played = [player, classmate]
+    # prompts user to see what they want every turn
+    classmate
   end
 
   def simulate_ai_combat(already_played)

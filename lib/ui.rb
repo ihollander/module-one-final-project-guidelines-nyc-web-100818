@@ -7,9 +7,9 @@ class UI
     tty_font_print("Welcome to Hogwarts!")
     sleep(1)
 
-    delimiter_magenta("^")
-    puts "\n This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
-    continue_prompt_magenta
+    UI.delimiter_magenta("^")
+    puts "This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
+    UI.continue_prompt_magenta
   end
 
   def prompt_for_player_name
@@ -39,7 +39,7 @@ class UI
 
   def run
 
-    clear_screen
+    UI.clear_screen
 
     self.game = Game.new # start a new game
 
@@ -62,7 +62,7 @@ class UI
 
   end
 
-  def clear_screen
+  def self.clear_screen
     IO.popen("clear", "w")
   end
 
@@ -76,15 +76,16 @@ class UI
     end
   end
 
-  def get_win_width
+  def UI.get_win_width
     row, column = $stdin.winsize
     column
   end
 
-  def continue_prompt_magenta
+  def UI.continue_prompt_magenta
+    puts " "
     continue = "(enter to continue)"
 
-    w = get_win_width
+    w = UI.get_win_width
 
     ((w / 2) - (continue.length / 2) - 1).times { print Pastel.new.magenta("^") }
 
@@ -92,12 +93,18 @@ class UI
 
     ((w / 2) - (continue.length / 2)).times { print Pastel.new.magenta("^") }
 
+    (w/2 - 1).times { print " " }
+    puts Pastel.new.yellow("⚡")
+
     gets.chomp
   end
 
-  def delimiter_magenta(character)
-    w = get_win_width
+  def UI.delimiter_magenta(character)
+    puts " "
+    w = UI.get_win_width
     w.times { print Pastel.new.magenta(character) }
+    (w/2).times { print " " }
+    puts Pastel.new.yellow("⚡")
   end
 
 end
