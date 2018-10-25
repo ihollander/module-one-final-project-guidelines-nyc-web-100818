@@ -3,7 +3,6 @@ class UI
   attr_accessor :game
 
   def display_welcome
-=======
     # puts ColorizedString["This is blue"].colorize(:light_blue)
     tty_font_print("Welcome to Hogwarts!")
     sleep(1)
