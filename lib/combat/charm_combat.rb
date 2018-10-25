@@ -29,8 +29,8 @@ class CharmCombat
   end
 
   def display_stats
-    player_damage = PASTEL.red("❤︎ " * self.player_damage)
-    classmate_damage = PASTEL.red("❤︎ " * self.classmate_damage)
+    player_damage = PASTEL.red("♥" * self.player_damage)
+    classmate_damage = PASTEL.red("♥" * self.classmate_damage)
     puts "#{self.player.name} charmed: #{player_damage}".ljust(SCREEN_SIZE[0] / 2) + "#{self.classmate.name} charmed: #{classmate_damage}".ljust(SCREEN_SIZE[0] / 2)
   end
 
