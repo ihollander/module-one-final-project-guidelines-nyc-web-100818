@@ -4,6 +4,9 @@ require 'json'
 require 'faker'
 require 'colorized_string'
 require 'colorize'
+require 'io/console'
+require 'tty-font'
+require 'pastel'
 
 Bundler.require
 

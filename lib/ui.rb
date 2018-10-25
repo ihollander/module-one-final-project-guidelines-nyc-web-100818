@@ -3,10 +3,14 @@ class UI
   attr_accessor :game
 
   def display_welcome
-    puts ColorizedString["This is blue"].colorize(:light_blue)
-    # binding.pry
-    puts "Welcome to Hogwarts!"
-    puts "In here you can befriend or defeat your fellow Hogwarts classmates."
+=======
+    # puts ColorizedString["This is blue"].colorize(:light_blue)
+    tty_font_print("Welcome to Hogwarts!")
+    sleep(1)
+
+    delimiter_magenta("^")
+    puts "\n This is a game where you befriend or defeat your fellow Hogwarts classmates to  become the coolest kid in class!"
+    continue_prompt_magenta
   end
 
   def prompt_for_player_name
@@ -35,6 +39,9 @@ class UI
   end
 
   def run
+
+    clear_screen
+
     self.game = Game.new # start a new game
 
     display_welcome # display welcome message
@@ -54,6 +61,43 @@ class UI
 
     display_game_over
 
+  end
+
+  def clear_screen
+    IO.popen("clear", "w")
+  end
+
+  def tty_font_print(text)
+    sp_text = text.split(" ")
+    pastel = Pastel.new
+    font = TTY::Font.new(:standard)
+    sp_text.each do |t|
+      puts pastel.cyan(font.write(t, letter_spacing: 1))
+    end
+  end
+
+  def get_win_width
+    row, column = $stdin.winsize
+    column
+  end
+
+  def continue_prompt_magenta
+    continue = "(enter to continue)"
+
+    w = get_win_width
+
+    ((w / 2) - (continue.length / 2) - 1).times { print Pastel.new.magenta("^") }
+
+    print Pastel.new.magenta(continue)
+
+    ((w / 2) - (continue.length / 2)).times { print Pastel.new.magenta("^") }
+
+    gets.chomp
+  end
+
+  def delimiter_magenta(character)
+    w = get_win_width
+    w.times { print Pastel.new.magenta(character) }
   end
 
 end
