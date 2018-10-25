@@ -81,7 +81,11 @@ class Game
     self.turn_prompt
     classmate = self.get_classmate_encounter
     classmate.display_intro # show the classmate info
+    encounter_character
+    simulate_ai_combat(already_played)
+  end
 
+  def encounter_character
     valid_input = false
     until valid_input
       puts "Taunt or compliment? [T]/[C]"
@@ -98,9 +102,6 @@ class Game
         puts "Invalid input!"
       end
     end
-
-    simulate_ai_combat(already_played)
-
   end
 
   def get_classmate_encounter

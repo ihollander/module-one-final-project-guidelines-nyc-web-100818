@@ -17,7 +17,7 @@ class Leaderboard
     scores = "|||Leaderboard|||\n"
     self.contenders.each { |contender| scores = scores + "#{score(contender)}" + "\n" }
     puts scores
-    ui.continue_prompt_magenta
+    UI.continue_prompt_magenta
   end
 
 end
