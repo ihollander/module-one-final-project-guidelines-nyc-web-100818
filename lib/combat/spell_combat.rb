@@ -1,7 +1,7 @@
 class SpellCombat
   include DisplayMethods
 
-  attr_accessor :player, :classmate, :player_damage, :classmate_damage, :whose_turn
+  attr_accessor :player, :classmate, :player_damage, :classmate_damage, :whose_turn, :easter_egg
 
   def initialize(player, classmate)
     @player = player
@@ -9,6 +9,7 @@ class SpellCombat
     @player_damage = 0
     @classmate_damage = 0
     @whose_turn = [@player.name, @classmate.name].sample
+    @easter_egg = false
   end
 
   def display_combat_screen(last_action)
@@ -51,14 +52,18 @@ class SpellCombat
   def start
     last_action = "You have entered a wizard duel with #{self.classmate.name}!"
     display_combat_screen(last_action)
-    
+
     until over?
       display_combat_screen(last_action)
       if self.whose_turn == self.player.name
         spell = self.player.prompt_for_spell
-        self.classmate_damage += spell.hit_points
-        last_action = display_spell_effect(spell, self.player, self.classmate)
-        self.whose_turn = self.classmate.name
+        if ["Avada Kedavra", "Crucio", "Imperio"].include?(spell.name) # exit combat and go to easter egg screen
+          self.easter_egg = true
+        else
+          self.classmate_damage += spell.hit_points
+          last_action = display_spell_effect(spell, self.player, self.classmate)
+          self.whose_turn = self.classmate.name
+        end
       else
         sleep(3)
         spell = self.classmate.spells.sample
@@ -88,7 +93,7 @@ class SpellCombat
   end
 
   def over?
-    self.player_damage >= self.player.hit_points || self.classmate_damage >= self.classmate.hit_points
+    self.player_damage >= self.player.hit_points || self.classmate_damage >= self.classmate.hit_points || self.easter_egg
   end
 
 end

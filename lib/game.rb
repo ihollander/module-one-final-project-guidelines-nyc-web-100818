@@ -2,13 +2,14 @@
 class Game
   include DisplayMethods
 
-  attr_accessor :lboard, :player, :classmates, :already_played, :player_quit
+  attr_accessor :lboard, :player, :classmates, :already_played, :player_quit, :easter_egg
 
   def initialize(player)
     @player = player
     # create classmates array
     @classmates = []
     @player_quit = false
+    @easter_egg = false
     init_random_classmates
     @lboard = Leaderboard.new(self.player, self.classmates)
   end
@@ -50,7 +51,7 @@ class Game
   end
 
   def over?
-     self.won? || self.lost? || self.player_quit
+     self.won? || self.lost? || self.player_quit || self.easter_egg
   end
 
   def turn
@@ -91,6 +92,9 @@ class Game
       when "T"
         combat_round = SpellCombat.new(self.player, classmate)
         combat_round.start
+        if combat_round.easter_egg
+          self.easter_egg = true
+        end
       when "C"
         combat_round = CharmCombat.new(self.player, classmate)
         combat_round.start

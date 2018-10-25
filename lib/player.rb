@@ -18,6 +18,8 @@ class Player < Character
     @classmates_faced = []
     self.friends = 0
     self.victories = 0
+    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. Use with caution!")
+    @spells << easter_egg_spell
   end
 
   def prompt_for_spell

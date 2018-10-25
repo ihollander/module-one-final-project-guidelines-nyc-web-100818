@@ -20,15 +20,21 @@ class UI
 
   def display_game_over
     clear_screen
-      if self.game.won?
-        display_delimiter_magenta("^","")
-        tty_font_print_end_page("Congratulation! You Won!")
-      else
-        display_delimiter_magenta("^","")
-        tty_font_print_end_page("You  are  neither")
-        tty_font_print_end_page("popular  nor  powerful")
-      end
+    if self.game.won?
+      display_delimiter_magenta("^","")
+      tty_font_print_end_page("Congratulation! You Won!")
+    elsif self.game.easter_egg
+      display_delimiter_magenta("^","")
+      tty_font_print_end_page("Welcome")
+      tty_font_print_end_page("to")
+      tty_font_print_end_page("Azkaban")
+      tty_font_print_end_page("GAME OVER")
+    else
+      display_delimiter_magenta("^","")
+      tty_font_print_end_page("You  are  neither")
+      tty_font_print_end_page("popular  nor  powerful")
     end
+  end
 
   def run
     clear_screen # call from display_methods
@@ -60,15 +66,6 @@ class UI
     font = TTY::Font.new(:standard)
     puts PASTEL.yellow(font.write(text))
   end
-
-# def house_color(player)
-#   house_color = player.house.color
-#   binding.pry
-#   house_color_split = house_color.split(" & ")
-#   if house_color_split[0] == "Scarlet"
-#     print Pastel.new.on_red(house_color)
-#   end
-# end
 
   def self.display_logo
     if SCREEN_SIZE[1] >= 76
@@ -107,5 +104,5 @@ class UI
       end
       gets
     end
-end
+  end
 end
