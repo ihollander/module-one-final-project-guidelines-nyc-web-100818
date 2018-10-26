@@ -18,7 +18,7 @@ class Player < Character
     @classmates_faced = []
     self.friends = 0
     self.victories = 0
-    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. Use with caution!")
+    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. People have been sent to Azkaban for less!")
     @spells << easter_egg_spell
   end
 
@@ -37,7 +37,7 @@ class Player < Character
   def display_intro
     intro_array = []
     intro_array << "\n#{self.name}, Olivanders has customized a wand for you! It's made of #{self.wand}."
-    intro_array << "\nYour pet: #{self.pet}! Your patronus: #{self.patronus}!"
+    intro_array << "\nYour pet #{self.pet} has come with you! You feel a kinship with your Patronus, the #{self.patronus}!"
     intro_array.each do |line|
       puts line
       sleep(2)

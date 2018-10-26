@@ -57,11 +57,11 @@ class SeedRunner
     {dialog: "You have your mother's eyes.", points: 1},
     {dialog: "Your patronus is very cool!", points: 2},
     {dialog: "Do you want to exchange chocolate frog cards?", points: 3},
-    {dialog: "Cheering! [A charm that makes the person happy and giddy]", points: 5},
+    {dialog: "I'll cheer for you at the next Quidditch match!", points: 5},
     {dialog: "What is your favorite candy from Honeydukes?", points: 3},
     {dialog: "Let's go play Quidditch together!", points: 4},
     {dialog: "I like Professor Snape.", points: 3},
-    {dialog: "I love your pet! What is his/her name?", points: 2}]
+    {dialog: "I love your pet! What's their name?", points: 2}]
     charm_hashes.each do |charm_hash|
       Charm.create(charm_hash)
     end
