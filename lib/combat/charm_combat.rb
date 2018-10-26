@@ -42,13 +42,13 @@ class CharmCombat
   def display_charm_effect(charm, caster, target)
     reaction = ""
     case charm.points
-      when 1, 2, 3
+      when 1, 2
         reaction = "#{target.name} smiles."
-      when 4, 5, 6
+      when 3
         reaction = "#{target.name} blushes!"
-      when 7, 8, 9
+      when 4
         reaction = "#{target.name} gives #{caster.name} a big ol hug!"
-      when 10
+      when 5
         reaction = "#{target.name} kisses #{caster.name}! Aww."
     end
     result = "#{caster.name} says: #{charm.dialog}\n"
