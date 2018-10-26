@@ -8,23 +8,16 @@ class UI
     tty_font_print("Welcome to Hogwarts!")
     sleep(SLEEP_TIME)
     display_delimiter_magenta("^","")
-<<<<<<< HEAD
     print "\nIn Howgarts, you can choose to become the most "
     print PASTEL.yellow("powerful")
     print " student or the most "
     print PASTEL.yellow("popular")
     puts " student."
-    sleep(2)
+    sleep(SLEEP_TIME)
     print "\nYou need to defeat or charm "
     print PASTEL.yellow("THREE")
     puts " of your fellow students or professor to win."
-    sleep(2)
-=======
-    puts "\nIn Howgarts, you can choose to become the most powerful student or the most popular student."
     sleep(SLEEP_TIME)
-    puts "\nYou need to defeat or charm THREE of your fellow students or professor to win."
-    sleep(SLEEP_TIME)
->>>>>>> charms_fix
     puts "\nMake your choices wisely."
     sleep(SLEEP_TIME)
     display_delimiter_magenta("^","Press [ENTER] to continue")

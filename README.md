@@ -19,7 +19,7 @@ Once done, run the program from the file bin/run.rb and enjoy yourself!
 
 ### Gameplay Video
 
-TODO - Add link
+https://www.youtube.com/watch?v=2f5nDuRvr0w
 
 ## API's Used
 

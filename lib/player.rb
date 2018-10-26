@@ -15,15 +15,11 @@ class Player < Character
     @classmates_faced = []
     self.friends = 0
     self.victories = 0
-<<<<<<< HEAD
-    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. People have been sent to Azkaban for less!")
-=======
   end
 
   def get_random_spells
     @spells = Spell.all.sample(4)
-    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. Use with caution!")
->>>>>>> charms_fix
+    easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. People have been sent to Azkaban for less!")
     @spells << easter_egg_spell
   end
 
