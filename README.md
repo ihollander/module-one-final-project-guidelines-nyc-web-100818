@@ -14,7 +14,7 @@ Through the CLI you'll engage these characters, either in lighthearted flirting 
 
 TODO - Add link
 
-# API's Used
+## API's Used
 
 This game makes use of two Harry Potter APIs.
 
@@ -22,7 +22,7 @@ The first is http://hp-api.herokuapp.com/ which made use of their characters dat
 
 The second is https://www.potterapi.com/ which has detailed lists of EVERYTHING. We used this specifically for its extensive list of spells.
 
-# Challenges
+## Challenges
 
 We built this project over the course of 3 days and faced a few difficult challenges.
 
