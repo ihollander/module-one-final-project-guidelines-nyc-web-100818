@@ -36,6 +36,13 @@ class UI
       tty_font_print_end_page("neither  popular")
       tty_font_print_end_page("nor  powerful")
     end
+    display_delimiter_magenta("^","Press [ENTER] to continue")
+    gets # wait for enter
+    disolve_screen(SCREEN_SIZE[1],0.01) # call from display_methods
+    self.game.lboard.display_all
+    display_delimiter_magenta("^","Press [ENTER] to continue")
+    gets # wait for enter
+    disolve_screen(SCREEN_SIZE[1],0.01) # call from display_methods
   end
 
   def run
