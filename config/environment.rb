@@ -25,3 +25,5 @@ MY_ANIMAL_FAKER = ["alligator", "crocodile", "alpaca", "ant", "antelope", "ape",
 SCREEN_SIZE = TTY::Screen.size
 CURSOR = TTY::Cursor
 PASTEL = Pastel.new
+
+SLEEP_TIME = 2

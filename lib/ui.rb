@@ -6,8 +6,9 @@ class UI
 
   def display_welcome
     tty_font_print("Welcome to Hogwarts!")
-    sleep(2)
+    sleep(SLEEP_TIME)
     display_delimiter_magenta("^","")
+<<<<<<< HEAD
     print "\nIn Howgarts, you can choose to become the most "
     print PASTEL.yellow("powerful")
     print " student or the most "
@@ -18,8 +19,14 @@ class UI
     print PASTEL.yellow("THREE")
     puts " of your fellow students or professor to win."
     sleep(2)
+=======
+    puts "\nIn Howgarts, you can choose to become the most powerful student or the most popular student."
+    sleep(SLEEP_TIME)
+    puts "\nYou need to defeat or charm THREE of your fellow students or professor to win."
+    sleep(SLEEP_TIME)
+>>>>>>> charms_fix
     puts "\nMake your choices wisely."
-    sleep(2)
+    sleep(SLEEP_TIME)
     display_delimiter_magenta("^","Press [ENTER] to continue")
     gets # wait for enter
   end
@@ -59,7 +66,16 @@ class UI
     display_welcome # display welcome message
     name_input = ask("Enter your name: ") # prompt for player to enter name
     player = Player.new(name_input) # create new player instance
+    if Player.find_by(name: name_input)
+      player.id = Player.find_by(name: name_input).id
+    else
+      player.save
+    end
+    player.get_random_spells
+    player.get_all_charms
     player.display_intro # display welcome message with player details
+    display_delimiter_magenta("^","(Sorting Hat working its magic... Press [ENTER] to continue)")
+    gets
     player.house.display_info # display house info
     display_delimiter_magenta("^","Press [ENTER] to continue")
     gets # wait for enter
