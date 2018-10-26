@@ -8,18 +8,23 @@ class Player < Character
     super(name: name)
     self.hit_points = 10
     self.charm_points = 10
-    self.name = name
     self.house_id = House.all.sample.id
     self.wand = Character.all.select{|c| !c.wand.start_with?(" ") }.sample.wand
     self.pet = ["cat", "owl", "toad", "rat"].sample
     self.patronus = MY_ANIMAL_FAKER.sample
-    @spells = Spell.all.sample(4)
-    @charms = Charm.all
     @classmates_faced = []
     self.friends = 0
     self.victories = 0
+  end
+
+  def get_random_spells
+    @spells = Spell.all.sample(4)
     easter_egg_spell = Spell.new(name: ["Avada Kedavra", "Crucio", "Imperio"].sample, description: "An unforgivable charm. Use with caution!")
     @spells << easter_egg_spell
+  end
+
+  def get_all_charms
+    @charms = Charm.all
   end
 
   def prompt_for_spell
@@ -40,19 +45,7 @@ class Player < Character
     intro_array << "\nYour pet: #{self.pet}! Your patronus: #{self.patronus}!"
     intro_array.each do |line|
       puts line
-      sleep(2)
-    end
-
-    display_delimiter_magenta("^","(Sorting Hat working its magic... Press [ENTER] to continue)")
-    gets
-
-    intro_array = []
-    intro_array << "\nCongratulations! You have been sorted into #{self.house.name} House!"
-    intro_array << "\n#{self.house.founder} founded the House hoping to find young wizards that have #{self.house.values}."
-    intro_array << "\nYour Head of House is #{self.house.head_of_house}.\nYour House ghost is #{self.house.house_ghost}."
-    intro_array.each do |line|
-      puts line
-      sleep(2)
+      sleep(SLEEP_TIME)
     end
   end
 

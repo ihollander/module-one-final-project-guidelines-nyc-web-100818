@@ -1,7 +1,7 @@
 class CharmCombat
   include DisplayMethods
 
-  attr_accessor :player, :player_damage, :player_charm_options, :classmate, :classmate_damage, :classmate_charm_options, :whose_turn
+  attr_accessor :player, :player_damage, :player_charms_used, :classmate, :classmate_damage, :classmate_charms_used, :whose_turn
 
   def initialize(player, classmate)
     @player = player
@@ -9,8 +9,8 @@ class CharmCombat
     @player_damage = 0
     @classmate_damage = 0
     @whose_turn = [@player.name, @classmate.name].sample
-    @player_charm_options = @player.charms
-    @classmate_charm_options = @classmate.charms
+    @player_charms_used = []
+    @classmate_charms_used = []
   end
 
   def display_combat_screen(last_action)
@@ -60,19 +60,22 @@ class CharmCombat
   def start
     last_action = "You're having a nice conversation with #{self.classmate.name}!"
     display_combat_screen(last_action)
-    
+
     until over?
       display_combat_screen(last_action)
       if self.whose_turn == self.player.name
         charm = prompt_player_for_charm
-        self.player_charm_options.delete(charm)
+        self.player_charms_used << charm
         self.classmate_damage += charm.points
         last_action = display_charm_effect(charm, self.player, self.classmate)
         self.whose_turn = self.classmate.name
       else
         sleep(3)
-        charm = self.classmate_charm_options.sample
-        self.classmate_charm_options.delete(charm)
+        available_charms = self.classmate.charms.select{|c|
+          !self.classmate_charms_used.include?(c)
+        }
+        charm = available_charms.sample
+        self.classmate_charms_used << charm
         self.player_damage += charm.points
         last_action = display_charm_effect(charm, self.classmate, self.player)
         self.whose_turn = self.player.name
@@ -86,11 +89,11 @@ class CharmCombat
   def start_ai_round
     until over?
       if self.whose_turn == self.player.name
-        charm = self.player_charm_options.sample
+        charm = self.player.charms.sample
         self.classmate_damage += charm.points
         self.whose_turn = self.classmate.name
       else
-        charm = self.classmate_charm_options.sample
+        charm = self.classmate.charms.sample
         self.player_damage += charm.points
         self.whose_turn = self.player.name
       end
@@ -108,7 +111,9 @@ class CharmCombat
 
   def prompt_player_for_charm
     charm = nil
-    available_charms = self.player_charm_options.sample(4)
+    available_charms = self.player.charms.select{|c|
+      !self.player_charms_used.include?(c)
+    }.sample(4)
     until charm
       puts self.display_charm_options(available_charms)
       charm_input = gets.chomp
