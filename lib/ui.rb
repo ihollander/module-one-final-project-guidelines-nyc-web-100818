@@ -22,7 +22,8 @@ class UI
     clear_screen
       if self.game.won?
         display_delimiter_magenta("^","")
-        tty_font_print_end_page("Congratulation! You Won!")
+        tty_font_print_end_page("Congratulation!")
+        tty_font_print_end_page("You Won!")
       else
         display_delimiter_magenta("^","")
         tty_font_print_end_page("You  are  neither")
